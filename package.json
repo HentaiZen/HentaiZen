@@ -1,0 +1,38 @@
+{
+  "name": "hentaizen",
+  "version": "0.9.0",
+  "description": "HentaiZen Mobile App",
+  "homepage": "https://hentaizen.cf",
+  "license": "AGPLv3",
+  "author": "HentaiZen <hentaizen@inbox.ru>",
+  "main": "node_modules/expo/AppEntry.js",
+  "repository": "https://github.com/HentaiZen/HentaiZen.git",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "buffer": "^5.2.1",
+    "cheerio": "0.22.0",
+    "events": "^3.0.0",
+    "expo": "^31.0.4",
+    "prop-types": "^15.6.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.tar.gz",
+    "react-native-fit-image": "^1.5.4",
+    "react-native-paper": "^2.4.0",
+    "react-navigation": "^2.18.3",
+    "stream": "^0.0.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "babel-preset-expo": "^5.0.0",
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-react-native": "^3.2.1"
+  }
+}
