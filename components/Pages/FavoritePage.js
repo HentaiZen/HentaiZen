@@ -1,4 +1,3 @@
-import cheerio from 'cheerio';
 import React from 'react';
 import {AsyncStorage, View} from 'react-native';
 import PropTypes from 'prop-types';
@@ -40,100 +39,49 @@ class FavoritePage extends React.Component {
         };
     }
 
-    static async fetchFavorites(callback, page = 0, galleries = []) {
-        if (!FavoritePage.mounted) return;
-
-        let cookieStr = '';
-        try {
-            const cookieString = await AsyncStorage.getItem('cookie');
-            const cookie = JSON.parse(cookieString);
-            if (cookie && cookie.igneous) {
-                cookieStr = `ipb_member_id=${cookie.ipb_member_id};`;
-                cookieStr += `ipb_pass_hash=${cookie.ipb_pass_hash};`;
-                cookieStr += `igneous=${cookie.igneous};`;
-                cookieStr += `s=${cookie.s};`;
-            }
-        } catch (e) {
-            // ignore error
-        }
-
-        fetch(`https://exhentai.org/favorites.php?page=${page}`, {
-            headers: {
-                Cookie: cookieStr,
-            }
-        }).then((response) => {
-            if (!FavoritePage.mounted) return;
-
-            if (response.ok) {
-                response.text().then((html) => {
-                    if (!FavoritePage.mounted) return;
-
-                    const $ = cheerio.load(html);
-
-                    let c = 0;
-                    $('.itg .itd .it5 a').each((i, v) => {
-                        const link = $(v).attr('href');
-                        if (link) {
-                            galleries.push(link.split('/')[4]);
-                            c++;
-                        }
-                    });
-
-                    if (c > 0) {
-                        setTimeout(() => FavoritePage.fetchFavorites(callback, page + 1, galleries), 500);
-                    } else {
-                        callback(galleries);
-                    }
-                })
-            }
-        }).catch(error => console.error(error));
-    }
-
     static async syncFavorites(navigation) {
         if (!FavoritePage.mounted || navigation.getParam('isSendFavorite')) return;
 
         navigation.setParams({'isSendFavorite': true});
 
         let tokenStr = '';
+        let cookieStr = '';
         try {
             const tokenString = await AsyncStorage.getItem('token');
             const token = JSON.parse(tokenString);
             if (token && token.access_token) {
                 tokenStr = `${token.token_type} ${token.access_token}`;
             }
+
+            const cookieString = await AsyncStorage.getItem('cookie');
+            const cookie = JSON.parse(cookieString);
+            cookieStr = `ipb_member_id=${cookie.ipb_member_id};ipb_pass_hash=${cookie.ipb_pass_hash};igneous=${cookie.igneous}`;
         } catch (e) {
             // ignore error
         }
 
-        FavoritePage.fetchFavorites((galleries) => {
+        fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Sync', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                Cookie: cookieStr,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': tokenStr
+            },
+            body: body.join('&'),
+        }).then((response) => {
             if (!FavoritePage.mounted) return;
 
-            let body = [];
-            galleries.forEach((gallery) => {
-                body.push(`galleryIds[]=${gallery}`);
-            });
-            fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Sync', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': tokenStr
-                },
-                body: body.join('&'),
-            }).then((response) => {
-                if (!FavoritePage.mounted) return;
-
-                if (!response.ok) {
-                    alert('Sync Failed');
-                } else {
-                    alert('Synced!');
-                }
-
-                navigation.setParams({'isSendFavorite': false});
-            }).catch(error => {
+            if (!response.ok) {
                 alert('Sync Failed');
-                console.error(error);
-            });
+            } else {
+                alert('Sync in process');
+            }
+
+            navigation.setParams({'isSendFavorite': false});
+        }).catch(error => {
+            alert('Sync Failed');
+            console.error(error);
         });
     }
 

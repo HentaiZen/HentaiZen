@@ -169,53 +169,32 @@ class GalleryPage extends React.Component {
     _addFavorite = () => {
         if (!GalleryPage.mounted) return;
 
-        console.log(this.state.cookie);
-        console.log(`https://exhentai.org/gallerypopups.php?gid=${this.state.id}&t=${this.state.key}&act=addfav`);
-
-        fetch(`https://exhentai.org/gallerypopups.php?gid=${this.state.id}&t=${this.state.key}&act=addfav`, {
-            method: 'POST',
-            headers: {
-                Cookie: this.state.cookie,
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'favcat=0&update=1',
-        }).then(() => {
-            if (!GalleryPage.mounted) return;
+        if (!GalleryPage.mounted) return;
             fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Add', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
+                    Cookie: this.state.cookie,
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': this.state.token
                 },
                 body: `galleryId=${this.state.id}`,
             }).then(() => this.setState({isSendFavorite: false, favorite: true}));
-        });
     };
 
     _removeFavorite = () => {
         if (!GalleryPage.mounted) return;
 
-        fetch(`https://exhentai.org/gallerypopups.php?gid=${this.state.id}&t=${this.state.key}&act=addfav`, {
+        fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Remove', {
             method: 'POST',
             headers: {
+                Accept: 'application/json',
                 Cookie: this.state.cookie,
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': this.state.token
             },
-            body: 'favcat=favdel&update=1',
-        }).then(() => {
-            if (!GalleryPage.mounted) return;
-
-            fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Remove', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': this.state.token
-                },
-                body: `galleryId=${this.state.id}`,
-            }).then(() => this.setState({isSendFavorite: false, favorite: false}));
-        });
+            body: `galleryId=${this.state.id}`,
+        }).then(() => this.setState({isSendFavorite: false, favorite: false}));
     };
 
     _favorite = () => {
