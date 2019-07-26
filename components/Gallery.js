@@ -13,14 +13,7 @@ export default class Gallery extends React.Component {
 	}
 
 	componentDidMount() {
-		if (!this.props.cookie || this.props.cookie.indexOf('igneous') === -1) {
-			const url = this.state.url.replace('exhentai.org', 'e-hentai.org');
-			const cover = this.state.cover.replace('exhentai.org', 'ehgt.org');
-			this.setState({
-				url: url,
-				cover: cover,
-			});
-		}
+		//
 	}
 
 	render() {
