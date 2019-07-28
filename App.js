@@ -1,7 +1,7 @@
 import React from 'react';
 import {AsyncStorage, StatusBar} from 'react-native';
 import {Button, Card, DefaultTheme, Modal, Paragraph, Portal, Provider as PaperProvider, Title} from 'react-native-paper';
-import {createDrawerNavigator, createStackNavigator} from 'react-navigation';
+import {createDrawerNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
 
 import MyDarkTheme from './components/MyDarkTheme';
 import DrawerItems from './components/DrawerItems';
@@ -15,7 +15,8 @@ import SearchPage from './components/Pages/SearchPage';
 
 import PreferencesContext from './components/PreferencesContext';
 
-const Nav = createDrawerNavigator({
+const Nav = createAppContainer(
+  createDrawerNavigator({
     Home: {
         screen: createStackNavigator({
             home: { screen: HomePage },
@@ -25,7 +26,7 @@ const Nav = createDrawerNavigator({
             gallery: {screen: GalleryPage},
         })
     }
-}, {
+  }, {
     contentComponent: (props) => (
         <PreferencesContext.Consumer>
         {preferences => (
@@ -38,7 +39,8 @@ const Nav = createDrawerNavigator({
         )}
         </PreferencesContext.Consumer>
     )
-});
+  }
+));
 
 export default class App extends React.Component {
     state = {
