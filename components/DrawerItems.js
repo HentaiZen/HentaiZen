@@ -43,6 +43,14 @@ class DrawerItems extends React.Component {
                             </View>
                         </View>
                     </TouchableRipple>
+                    <TouchableRipple onPress={() => alert('Not yet')}>
+                        <View style={styles.preference}>
+                            <Text>Block List</Text>
+                            <View pointerEvents="none">
+                                <Button icon="settings" mode="contained">Manage</Button>
+                            </View>
+                        </View>
+                    </TouchableRipple>
                     <TouchableRipple onPress={this.props.toggleTheme}>
                         <View style={styles.preference}>
                             <Text>Dark Theme</Text>
