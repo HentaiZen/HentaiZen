@@ -169,31 +169,28 @@ class GalleryPage extends React.Component {
     _addFavorite = () => {
         if (!GalleryPage.mounted) return;
 
-        if (!GalleryPage.mounted) return;
-            fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Add', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    Cookie: this.state.cookie,
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': this.state.token
-                },
-                body: `galleryId=${this.state.id}`,
-            }).then(() => this.setState({isSendFavorite: false, favorite: true}));
-    };
-
-    _removeFavorite = () => {
-        if (!GalleryPage.mounted) return;
-
-        fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Remove', {
-            method: 'POST',
+        fetch(`https://api.hentaizen.cf/api/v0.9/Favorites/${this.state.id}`, {
+            method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 Cookie: this.state.cookie,
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': this.state.token
             },
-            body: `galleryId=${this.state.id}`,
+        }).then(() => this.setState({isSendFavorite: false, favorite: true}));
+    };
+
+    _removeFavorite = () => {
+        if (!GalleryPage.mounted) return;
+
+        fetch(`https://api.hentaizen.cf/api/v0.9/Favorites/${this.state.id}`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                Cookie: this.state.cookie,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': this.state.token
+            },
         }).then(() => this.setState({isSendFavorite: false, favorite: false}));
     };
 

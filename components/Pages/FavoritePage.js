@@ -60,7 +60,7 @@ class FavoritePage extends React.Component {
             // ignore error
         }
 
-        fetch('https://api.hentaizen.cf/api/v0.9/Favorites/Sync', {
+        fetch('https://api.hentaizen.cf/api/v0.9/Favorites', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -68,7 +68,6 @@ class FavoritePage extends React.Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': tokenStr
             },
-            body: body.join('&'),
         }).then((response) => {
             if (!FavoritePage.mounted) return;
 
